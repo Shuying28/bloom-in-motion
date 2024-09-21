@@ -1,0 +1,77 @@
+.landing-page {
+  background-color: #191919;
+  color: white;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+}
+
+.header {
+  background-color: #191919;
+  padding: 0 2rem;
+  color: white;
+  position: sticky;
+  top: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  width: 30px !important;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.ticket-section {
+  position: relative;
+  padding: 100px 0;
+  background-color: #e0e0e0;
+}
+
+.absolute-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /* Adjust as needed */
+  height: 100%; /* Adjust as needed */
+  object-fit: cover; /* Ensure the image covers the section */
+}
+
+.buy-ticket-button {
+  background-color: #ffb6c1;
+  border: none;
+  padding: 10px 40px;
+}
+
+.about-section,
+.event-section,
+.past-events-section {
+  padding: 60px 20px;
+  color: white;
+}
+
+.about-section h2,
+.event-section h3 {
+  color: #ffb6c1;
+}
+
+.past-events-section {
+  background-color: #4f4f4f;
+}
+
+.footer {
+  background-color: #282828;
+  padding: 40px 0;
+  color: white;
+}
+
+.footer-row {
+  text-align: center;
+}
+
+.social-icons img {
+  width: 40px;
+  margin: 0 10px;
+}
