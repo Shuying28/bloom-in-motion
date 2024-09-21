@@ -2,14 +2,16 @@ import React, { useRef } from "react";
 import { firestore } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { Button, Layout, Row, Col } from "antd";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import "./styles/home.css"; // Custom styles
+import "./styles/home.css";
 
 const { Header, Content, Footer } = Layout;
 
 const Home: React.FC = () => {
   const messageRef = useRef<HTMLInputElement>(null);
   const ref = collection(firestore, "messages");
+  const navigate = useNavigate();
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,6 +63,7 @@ const Home: React.FC = () => {
                   shape="round"
                   size="large"
                   className="buy-ticket-button"
+                  onClick={() => navigate("/seatselection")}
                 >
                   Buy Ticket
                 </Button>

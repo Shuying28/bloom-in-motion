@@ -1,0 +1,101 @@
+.confirm-ticket {
+  background-color: #181414;
+  color: white;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  font-size: 1.5em;
+  color: #e5e5e5;
+}
+
+.seat-info,
+.price-info,
+.payment-options {
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 1em;
+  color: #e58989;
+}
+
+.price-info p {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.payment-options label {
+  display: block;
+  padding: 15px;
+  background-color: #2c2c2c;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.payment-options label:hover {
+  background-color: #3c3c3c;
+}
+
+.payment-options input {
+  margin-right: 10px;
+}
+
+.payment-options .bank-info,
+.payment-options .tng-info {
+  margin-top: 10px;
+}
+
+.payment-options .bank-info p,
+.payment-options .tng-info p {
+  margin: 5px 0;
+}
+
+.payment-options img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.next-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #f5c7e1;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.next-button:hover {
+  background-color: #e5a7c1;
+}
+
+@media screen and (max-width: 600px) {
+  .confirm-ticket {
+    padding: 15px;
+  }
+
+  .payment-options label {
+    padding: 10px;
+  }
+
+  .next-button {
+    padding: 8px;
+  }
+}
