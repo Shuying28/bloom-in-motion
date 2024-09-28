@@ -12,10 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/seatselection" element={<SeatSelection />} />
-        <Route
-          path="/confirmTicket"
-          element={<ConfirmTicket seats={[]} totalPrice={100} />}
-        />
+        <Route path="/confirmTicket" element={<ConfirmTicket />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/success" element={<Success />} />
       </Routes>

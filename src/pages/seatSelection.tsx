@@ -4,26 +4,26 @@ import { useNavigate } from "react-router-dom";
 
 const SeatSelection: React.FC = () => {
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
 
-  // from row 2 - 17
   const seatCounts = {
-    2: 35, // Row 2: 35 seats
-    3: 34, // Row 3: 34 seats
-    4: 35, // Row 4: 35 seats
-    5: 34, // Row 5: 34 seats
-    6: 35, // Row 6: 35 seats
-    7: 34, // Row 7: 34 seats
-    8: 35, // Row 8: 35 seats
-    9: 34, // Row 9: 34 seats
-    10: 35, // Row 10: 35 seats
-    11: 34, // Row 11: 34 seats
-    12: 35, // Row 12: 35 seats
-    13: 34, // Row 13: 34 seats
-    14: 35, // Row 14: 35 seats
-    15: 34, // Row 15: 34 seats
-    16: 35, // Row 16: 35 seats
-    17: 30, // Row 17: 30 seats
+    2: 35,
+    3: 34,
+    4: 35,
+    5: 34,
+    6: 35,
+    7: 34,
+    8: 35,
+    9: 34,
+    10: 35,
+    11: 34,
+    12: 35,
+    13: 34,
+    14: 35,
+    15: 34,
+    16: 35,
+    17: 30,
   };
 
   const zones = {
@@ -32,14 +32,60 @@ const SeatSelection: React.FC = () => {
     C: { startRow: 13, endRow: 17, color: "green" },
   };
 
+  const earlyBirdPrices = {
+    A: 30,
+    B: 20,
+    C: 15,
+  };
+
+  const normalPrices = {
+    A: 35,
+    B: 25,
+    C: 20,
+  };
+
+  const isEarlyBird = (): boolean => {
+    const today = new Date();
+    const earlyBirdStart = new Date(today.getFullYear(), 9, 1); // 1/10
+    const earlyBirdEnd = new Date(today.getFullYear(), 9, 10); // 10/10
+
+    return today >= earlyBirdStart && today <= earlyBirdEnd;
+  };
+
+  const currentPrices = isEarlyBird() ? earlyBirdPrices : normalPrices;
+
   const handleSeatClick = (zone: string, row: number, seat: number) => {
     const seatCode = `${zone}${row}-${seat < 10 ? `0${seat}` : seat}`;
+    const isSelected = selectedSeats.includes(seatCode);
 
-    setSelectedSeats((prev) =>
-      prev.includes(seatCode)
-        ? prev.filter((s) => s !== seatCode)
-        : [...prev, seatCode]
-    );
+    let updatedSeats;
+    let updatedPrice = totalPrice;
+
+    if (isSelected) {
+      // Remove seat and subtract its price
+      updatedSeats = selectedSeats.filter((s) => s !== seatCode);
+      updatedPrice -= currentPrices[zone as keyof typeof currentPrices];
+    } else {
+      // Add seat and its price
+      updatedSeats = [...selectedSeats, seatCode];
+      updatedPrice += currentPrices[zone as keyof typeof currentPrices];
+    }
+
+    setSelectedSeats(updatedSeats);
+    setTotalPrice(updatedPrice);
+  };
+
+  const generateSeatNumbers = (rowCount: number) => {
+    const evenNumbers = [];
+    const oddNumbers = [];
+
+    // Generating seat numbers, even on the left, odd on the right
+    for (let seat = rowCount; seat >= 1; seat--) {
+      if (seat % 2 === 0) evenNumbers.push(seat);
+      else oddNumbers.push(seat);
+    }
+
+    return [...evenNumbers, ...oddNumbers.reverse()];
   };
 
   const renderSeats = () => {
@@ -51,31 +97,31 @@ const SeatSelection: React.FC = () => {
           row <= zones[key as keyof typeof zones].endRow
       );
 
-      const seatRow = [];
-      for (
-        let seat = 1;
-        seat <= seatCounts[row as keyof typeof seatCounts];
-        seat++
-      ) {
-        const seatCode = `${zone}${row}-${seat < 10 ? `0${seat}` : seat}`;
+      const seatNumbers = generateSeatNumbers(
+        seatCounts[row as keyof typeof seatCounts]
+      );
+
+      const seatRow = seatNumbers.map((seatNum) => {
+        const seatCode = `${zone}${row}-${seatNum}`;
         const isSelected = selectedSeats.includes(seatCode);
 
-        seatRow.push(
+        return (
           <div
             key={seatCode}
             className={`seat ${zones[zone as keyof typeof zones].color} ${
               isSelected ? "selected" : ""
             }`}
-            onClick={() => handleSeatClick(zone!, row, seat)}
+            onClick={() => handleSeatClick(zone!, row, seatNum)}
           >
-            {/* Render seat visual here */}
+            {seatNum} {/* Render seat number */}
           </div>
         );
-      }
+      });
 
       seatRows.push(
         <div key={row} className="seat-row">
-          Row {row} {seatRow}
+          <div className="row-label">Row {row}</div>
+          <div className="seat-wrapper">{seatRow}</div>
         </div>
       );
     }
@@ -89,19 +135,22 @@ const SeatSelection: React.FC = () => {
       <div className="seating-chart">{renderSeats()}</div>
 
       <div className="legend">
-        <div style={{ display: "flex" }}>
-          <span className="seat red"></span> Zone A
+        <div style={{ marginBottom: "20px" }}>
+          <span className="seat red"></span> Zone A &nbsp; [RM
+          {currentPrices["A"]}]
         </div>
-        <div>
-          <span className="seat blue"></span> Zone B
+        <div style={{ marginBottom: "20px" }}>
+          <span className="seat blue"></span> Zone B &nbsp; [RM
+          {currentPrices["B"]}]
         </div>
-        <div>
-          <span className="seat green"></span> Zone C
+        <div style={{ marginBottom: "20px" }}>
+          <span className="seat green"></span> Zone C &nbsp; [RM
+          {currentPrices["C"]}]
         </div>
-        <div>
+        <div style={{ marginBottom: "20px" }}>
           <span className="seat selected"></span> Selected
         </div>
-        <div>
+        <div style={{ marginBottom: "20px" }}>
           <span className="seat reserved"></span> Occupied
         </div>
       </div>
@@ -110,13 +159,22 @@ const SeatSelection: React.FC = () => {
         Seat(s) Selection: {selectedSeats.join(", ")}
       </div>
 
-      <button
-        className="next-button"
-        disabled={selectedSeats.length === 0}
-        onClick={() => navigate("/confirmTicket", { state: { selectedSeats } })}
-      >
-        Next
-      </button>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <button
+          className="next-button"
+          disabled={selectedSeats.length === 0}
+          onClick={() =>
+            navigate("/confirmTicket", {
+              state: {
+                selectedSeats,
+                totalPrice,
+              },
+            })
+          }
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

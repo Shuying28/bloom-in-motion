@@ -1,7 +1,6 @@
 .payment-page {
   background-color: #181414;
   color: white;
-  width: 100vw;
   height: 100vh;
   padding: 20px;
 }
@@ -13,11 +12,18 @@
   margin-bottom: 20px;
 }
 
+.payment-page label {
+  display: block;
+  margin-bottom: 10px;
+}
+
 .payment-page .ant-input {
   background-color: #2c2c2c;
   color: white;
   border: none;
+  padding: 8px 11px !important;
   border-radius: 10px;
+  margin-bottom: 20px !important;
 }
 
 .payment-page .ant-input::placeholder {
@@ -33,7 +39,7 @@
   font-size: 1em;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 50px;
+  margin-top: 50px !important;
   width: 30%;
 }
 

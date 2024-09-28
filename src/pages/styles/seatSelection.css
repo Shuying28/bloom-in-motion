@@ -15,13 +15,25 @@
 .seating-chart {
   display: flex;
   flex-direction: column;
-  align-items: center;
   overflow-x: auto;
 }
 
 .seat-row {
   display: flex;
-  margin-bottom: 5px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.row-label {
+  flex: 0 0 80px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.seat-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
 .seat {
@@ -46,6 +58,7 @@
 
 .seat.selected {
   background-color: yellow;
+  color: black;
 }
 
 .seat.reserved {
@@ -53,9 +66,17 @@
 }
 
 .legend {
-  display: flex;
-  justify-content: left;
   margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+@media screen and (min-width: 670px) {
+  .legend {
+    display: flex;
+    justify-content: left;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
 }
 
 .legend div {
@@ -70,7 +91,6 @@
 
 .seat-info {
   display: flex;
-  margin-top: 20px;
   margin-left: 10px;
 }
 

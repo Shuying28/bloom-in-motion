@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./styles/confirmTicket.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-interface ConfirmTicketProps {
-  seats: string[];
-  totalPrice: number;
-}
-
-const ConfirmTicket: React.FC<ConfirmTicketProps> = ({ seats, totalPrice }) => {
+const ConfirmTicket: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { selectedSeats, totalPrice } = location.state || {};
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [checked, setChecked] = useState(false);
   const [confirm, setConfirm] = useState(false);
@@ -32,7 +29,7 @@ const ConfirmTicket: React.FC<ConfirmTicketProps> = ({ seats, totalPrice }) => {
       <h2>Confirm Ticket</h2>
       <div className="ticket-info">
         <h3>Seats(s)</h3>
-        <p>{seats.join(", ")}</p>
+        <p>{selectedSeats.join(", ")}</p>
       </div>
       <hr style={{ border: "1px solid #ccc", margin: "10px 0" }} />
       <div className="ticket-info">
@@ -46,8 +43,8 @@ const ConfirmTicket: React.FC<ConfirmTicketProps> = ({ seats, totalPrice }) => {
           <input
             type="radio"
             name="paymentMethod"
-            checked={paymentMethod === "bankTransfer"}
-            onChange={() => handlePaymentSelection("bankTransfer")}
+            checked={paymentMethod === "Bank Transfer"}
+            onChange={() => handlePaymentSelection("Bank Transfer")}
           />
           Bank Transfer
           <div className="bank-info">
@@ -63,8 +60,8 @@ const ConfirmTicket: React.FC<ConfirmTicketProps> = ({ seats, totalPrice }) => {
           <input
             type="radio"
             name="paymentMethod"
-            checked={paymentMethod === "tng"}
-            onChange={() => handlePaymentSelection("tng")}
+            checked={paymentMethod === "Touch 'n Go eWallet"}
+            onChange={() => handlePaymentSelection("Touch 'n Go eWallet")}
           />
           Touch 'n Go eWallet
           <div className="tng-info">
@@ -130,11 +127,19 @@ const ConfirmTicket: React.FC<ConfirmTicketProps> = ({ seats, totalPrice }) => {
         </div>
       </div>
 
-      <div style={{ textAlign: "center" }}>
+      <div style={{ display: "flex", justifyContent: "center" }}>
         <button
           className={`next-button ${confirm ? "active" : "disabled"}`}
           disabled={!confirm}
-          onClick={() => navigate("/payment")}
+          onClick={() =>
+            navigate("/payment", {
+              state: {
+                selectedSeats,
+                totalPrice,
+                paymentMethod,
+              },
+            })
+          }
         >
           Next
         </button>
