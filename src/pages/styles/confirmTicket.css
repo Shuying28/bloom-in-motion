@@ -1,8 +1,7 @@
-.confirm-ticket {
+.confirm-ticket-page {
   background-color: #181414;
   color: white;
   width: 100%;
-  margin: 0 auto;
   padding: 20px;
 }
 
@@ -12,8 +11,7 @@ h2 {
   color: #e5e5e5;
 }
 
-.seat-info,
-.price-info,
+.ticket-info,
 .payment-options {
   margin-bottom: 20px;
 }
@@ -28,7 +26,7 @@ p {
   color: #e58989;
 }
 
-.price-info p {
+.ticket-info p {
   font-size: 1.2em;
   font-weight: bold;
 }
@@ -70,16 +68,16 @@ p {
 }
 
 .next-button {
-  width: 100%;
+  background-color: pink;
   padding: 10px;
-  background-color: #f5c7e1;
   color: white;
   border: none;
   border-radius: 25px;
-  font-size: 1.2em;
+  font-size: 1em;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  margin-top: 50px;
+  width: 30%;
 }
 
 .next-button:hover {
@@ -97,5 +95,7 @@ p {
 
   .next-button {
     padding: 8px;
+    justify-content: center;
+    display: flex;
   }
 }

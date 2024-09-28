@@ -6,12 +6,30 @@ const SeatSelection: React.FC = () => {
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const navigate = useNavigate();
 
-  const rows = 17;
-  const seatsPerRow = 30;
+  // from row 2 - 17
+  const seatCounts = {
+    2: 35, // Row 2: 35 seats
+    3: 34, // Row 3: 34 seats
+    4: 35, // Row 4: 35 seats
+    5: 34, // Row 5: 34 seats
+    6: 35, // Row 6: 35 seats
+    7: 34, // Row 7: 34 seats
+    8: 35, // Row 8: 35 seats
+    9: 34, // Row 9: 34 seats
+    10: 35, // Row 10: 35 seats
+    11: 34, // Row 11: 34 seats
+    12: 35, // Row 12: 35 seats
+    13: 34, // Row 13: 34 seats
+    14: 35, // Row 14: 35 seats
+    15: 34, // Row 15: 34 seats
+    16: 35, // Row 16: 35 seats
+    17: 30, // Row 17: 30 seats
+  };
+
   const zones = {
-    A: { startRow: 1, endRow: 5, color: "red" },
-    B: { startRow: 6, endRow: 11, color: "blue" },
-    C: { startRow: 12, endRow: 17, color: "green" },
+    A: { startRow: 2, endRow: 7, color: "red" },
+    B: { startRow: 8, endRow: 12, color: "blue" },
+    C: { startRow: 13, endRow: 17, color: "green" },
   };
 
   const handleSeatClick = (zone: string, row: number, seat: number) => {
@@ -26,7 +44,7 @@ const SeatSelection: React.FC = () => {
 
   const renderSeats = () => {
     const seatRows = [];
-    for (let row = 1; row <= rows; row++) {
+    for (let row = 2; row <= 17; row++) {
       const zone = Object.keys(zones).find(
         (key) =>
           row >= zones[key as keyof typeof zones].startRow &&
@@ -34,7 +52,11 @@ const SeatSelection: React.FC = () => {
       );
 
       const seatRow = [];
-      for (let seat = 1; seat <= seatsPerRow; seat++) {
+      for (
+        let seat = 1;
+        seat <= seatCounts[row as keyof typeof seatCounts];
+        seat++
+      ) {
         const seatCode = `${zone}${row}-${seat < 10 ? `0${seat}` : seat}`;
         const isSelected = selectedSeats.includes(seatCode);
 
@@ -67,24 +89,24 @@ const SeatSelection: React.FC = () => {
       <div className="seating-chart">{renderSeats()}</div>
 
       <div className="legend">
-        <div>
-          <span className="red"></span> Zone A
+        <div style={{ display: "flex" }}>
+          <span className="seat red"></span> Zone A
         </div>
         <div>
-          <span className="blue"></span> Zone B
+          <span className="seat blue"></span> Zone B
         </div>
         <div>
-          <span className="green"></span> Zone C
+          <span className="seat green"></span> Zone C
         </div>
         <div>
-          <span className="yellow"></span> Selected
+          <span className="seat selected"></span> Selected
         </div>
         <div>
-          <span className="gray"></span> Occupied
+          <span className="seat reserved"></span> Occupied
         </div>
       </div>
 
-      <div className="selection-info">
+      <div className="seat-info">
         Seat(s) Selection: {selectedSeats.join(", ")}
       </div>
 

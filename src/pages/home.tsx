@@ -124,15 +124,16 @@ const Home: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/path/to/instagram-icon.png" alt="Instagram" />
+                <img src={require("../assets/ig_icon.png")} alt="Instagram" />
               </a>
               <a
                 href="https://wa.me/123456789"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/path/to/whatsapp-icon.png" alt="WhatsApp" />
+                <img src={require("../assets/wa_icon.png")} alt="WhatsApp" />
               </a>
+              <div>@xmumdc_concert</div>
             </div>
           </Col>
         </Row>
