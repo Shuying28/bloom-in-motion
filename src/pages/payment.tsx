@@ -8,13 +8,15 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { firestore } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid"; // For unique file names
 import "./styles/payment.css";
 
 const Payment: React.FC = () => {
   const location = useLocation();
   const { selectedSeats, totalPrice, paymentMethod } = location.state || {};
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     studentID: "",
@@ -25,7 +27,6 @@ const Payment: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const navigate = useNavigate();
   const storage = getStorage();
-  const db = getFirestore();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,13 +34,10 @@ const Payment: React.FC = () => {
   };
 
   const handleFileChange = (info: any) => {
-    console.log(info);
-    const selectedFile = info.file;
-    const validTypes = ["image/png", "image/jpg", "image/jpeg"];
-    if (selectedFile && validTypes.includes(selectedFile.type)) {
-      setFile(selectedFile);
+    if (info.fileList.length > 0) {
+      setFile(info.fileList[0]);
     } else {
-      message.error("Please upload a file of type PNG, JPG, or JPEG!");
+      setFile(null);
     }
   };
 
@@ -54,9 +52,11 @@ const Payment: React.FC = () => {
       message.error(
         "Please fill in all fields and upload the payment receipt."
       );
+      setIsLoading(true);
       return;
     }
 
+    setIsLoading(true);
     try {
       // Upload the receipt image to Firebase Storage
       const storageRef = ref(storage, `receipts/${uuidv4()}_${file?.name}`);
@@ -67,24 +67,35 @@ const Payment: React.FC = () => {
         () => {},
         (error) => {
           message.error("Failed to upload receipt: " + error.message);
+          setIsLoading(false);
         },
         async () => {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
           setFormData({ ...formData, receiptUrl: downloadURL });
 
           // Save the form data to Firestore
-          const docRef = doc(db, "payments", uuidv4());
-          await setDoc(docRef, {
-            ...formData,
-            receiptUrl: downloadURL,
-          });
-
-          message.success("Payment details submitted successfully!");
-          navigate("/success");
+          const docRef = doc(firestore, "payments", uuidv4());
+          try {
+            await setDoc(docRef, {
+              ...formData,
+              receiptUrl: downloadURL,
+              selectedSeats,
+              totalPrice,
+              paymentMethod,
+            });
+            message.success("Payment details submitted successfully!");
+            navigate("/success");
+          } catch (error) {
+            // TODO: avoid "application/octet-stream" to be stored in the firestore anfd storage
+            message.error("Error submitting form: " + error);
+          } finally {
+            setIsLoading(false);
+          }
         }
       );
     } catch (error) {
       message.error("Error submitting form: " + error);
+      setIsLoading(false);
     }
   };
 
@@ -130,23 +141,23 @@ const Payment: React.FC = () => {
       <label htmlFor="receipt">Payment Receipt</label>
       <Upload
         id="receipt"
-        beforeUpload={() => false}
+        beforeUpload={(file) => {
+          const validTypes = ["image/png", "image/jpg", "image/jpeg"];
+          if (!validTypes.includes(file.type)) {
+            message.error("Please upload a file of type PNG, JPG, or JPEG!");
+            return Upload.LIST_IGNORE;
+          }
+          return false;
+        }}
+        onRemove={() => {
+          setFile(null);
+          console.log("File removed");
+        }}
         onChange={handleFileChange}
         maxCount={1}
       >
         <Button icon={<UploadOutlined />}>Upload Payment Receipt</Button>
       </Upload>
-
-      {/* {file && (
-        <div>
-          <h3>Uploaded Receipt:</h3>
-          <img
-            src={URL.createObjectURL(selectedFile)}
-            alt="Uploaded Receipt"
-            style={{ maxWidth: "100%", marginTop: "20px" }}
-          />
-        </div>
-      )} */}
 
       <div style={{ textAlign: "center" }}>
         <Button
@@ -154,6 +165,8 @@ const Payment: React.FC = () => {
           shape="round"
           size="large"
           onClick={handleConfirm}
+          disabled={isLoading}
+          loading={isLoading}
           style={{ marginTop: "20px" }}
         >
           Confirm

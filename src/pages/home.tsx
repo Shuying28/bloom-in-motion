@@ -1,31 +1,13 @@
-import React, { useRef } from "react";
-import { firestore } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
+import React from "react";
 import { Button, Layout, Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./styles/home.css";
 
-const { Header, Content, Footer } = Layout;
+const { Content, Footer } = Layout;
 
 const Home: React.FC = () => {
-  const messageRef = useRef<HTMLInputElement>(null);
-  const ref = collection(firestore, "messages");
   const navigate = useNavigate();
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const message = messageRef.current?.value;
-    if (!message) return;
-    console.log(message);
-
-    try {
-      await addDoc(ref, { message });
-    } catch (error) {
-      console.error("Error adding document: ", error);
-    }
-    messageRef.current!.value = "";
-  };
 
   return (
     <Layout className="landing-page">
