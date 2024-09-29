@@ -1,8 +1,8 @@
 .success-page {
   text-align: center;
-  padding: 50px;
+  padding: 0 50px;
   background-color: #181414;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,24 +21,25 @@
   color: #ffffff;
 }
 
-h2 {
+.success-title {
   font-size: 24px;
   margin-bottom: 10px;
   color: #e5e5e5;
 }
 
-p {
+.success-info {
   color: #b8b8b8;
   font-size: 16px;
   margin-bottom: 40px;
 }
 
 .home-button {
-  background-color: pink;
+  background-color: #f2badc;
   border: none;
   color: white;
+  width: 30%;
 }
 
 .home-button:hover {
-  background-color: #e5a7c1;
+  background-color: #c87899 !important;
 }

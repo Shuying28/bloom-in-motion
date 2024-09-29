@@ -1,7 +1,7 @@
 .payment-page {
   background-color: #181414;
   color: white;
-  height: 100vh;
+  min-height: 100vh;
   padding: 20px;
 }
 
@@ -31,7 +31,7 @@
 }
 
 .payment-page .ant-btn-primary {
-  background-color: pink;
+  background-color: #f2badc;
   padding: 10px;
   color: white;
   border: none;
@@ -44,5 +44,10 @@
 }
 
 .payment-page .ant-btn-primary:hover {
-  background-color: #e5a7c1;
+  background-color: #c87899 !important;
+}
+
+.ant-upload-list-item-name,
+.ant-upload-list-item .anticon svg {
+  color: white !important;
 }

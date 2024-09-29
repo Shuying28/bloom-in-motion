@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Input, Upload, message } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   getStorage,
@@ -9,24 +9,89 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { firestore } from "../firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid"; // For unique file names
 import "./styles/payment.css";
 
+interface formData {
+  name: string;
+  studentID: string;
+  campusEmail: string;
+  contactNo: string;
+  receiptUrl: string;
+}
+
 const Payment: React.FC = () => {
   const location = useLocation();
+  const [reservedSeats, setReservedSeats] = useState<string[]>([]);
   const { selectedSeats, totalPrice, paymentMethod } = location.state || {};
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    studentID: "",
-    campusEmail: "",
-    contactNo: "",
-    receiptUrl: "",
+  const [formData, setFormData] = useState<formData>(() => {
+    const storedFormData = sessionStorage.getItem("formData");
+    return storedFormData
+      ? JSON.parse(storedFormData)
+      : {
+          name: "",
+          studentID: "",
+          campusEmail: "",
+          contactNo: "",
+          receiptUrl: "",
+        };
   });
+  // const [file, setFile] = useState<File | null>(() => {
+  //   const storedFile = sessionStorage.getItem("file");
+  //   return storedFile ? JSON.parse(storedFile) : null;
+  // });
   const [file, setFile] = useState<File | null>(null);
   const navigate = useNavigate();
   const storage = getStorage();
+
+  const fetchReservedSeats = async () => {
+    const reservedSeats: string[] = [];
+
+    try {
+      const querySnapshot = await getDocs(collection(firestore, "payments"));
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        reservedSeats.push(...(data.selectedSeats || []));
+      });
+    } catch (error) {
+      console.error("Error fetching reserved seats: ", error);
+    }
+
+    return reservedSeats;
+  };
+
+  const checkCrashedSeats = () => {
+    const crashedSeats = selectedSeats.filter((seat: string) =>
+      reservedSeats.includes(seat)
+    );
+    if (crashedSeats.length > 0) {
+      message.error(
+        `The following seats have been reserved by others: ${crashedSeats.join(
+          ", "
+        )}`
+      );
+      navigate("/seatselection");
+      sessionStorage.setItem("selectedSeats", JSON.stringify([]));
+    }
+  };
+
+  useEffect(() => {
+    // Retrieve reserved seats from Firestore
+    const loadReservedSeats = async () => {
+      const reserved = await fetchReservedSeats();
+      setReservedSeats(reserved);
+    };
+
+    loadReservedSeats();
+
+    sessionStorage.setItem("formData", JSON.stringify(formData));
+  }, [formData]);
+
+  // useEffect(() => {
+  //   sessionStorage.setItem("file", JSON.stringify(file));
+  // }, [file]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,15 +117,19 @@ const Payment: React.FC = () => {
       message.error(
         "Please fill in all fields and upload the payment receipt."
       );
-      setIsLoading(true);
+      setIsLoading(false);
       return;
     }
 
+    checkCrashedSeats();
     setIsLoading(true);
     try {
       // Upload the receipt image to Firebase Storage
       const storageRef = ref(storage, `receipts/${uuidv4()}_${file?.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+      const metadata = {
+        contentType: file.type,
+      };
+      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
       uploadTask.on(
         "state_changed",
@@ -85,8 +154,8 @@ const Payment: React.FC = () => {
             });
             message.success("Payment details submitted successfully!");
             navigate("/success");
+            sessionStorage.clear();
           } catch (error) {
-            // TODO: avoid "application/octet-stream" to be stored in the firestore anfd storage
             message.error("Error submitting form: " + error);
           } finally {
             setIsLoading(false);
@@ -151,10 +220,19 @@ const Payment: React.FC = () => {
         }}
         onRemove={() => {
           setFile(null);
-          console.log("File removed");
+          // sessionStorage.setItem("file", "");
         }}
         onChange={handleFileChange}
         maxCount={1}
+        showUploadList={{
+          extra: ({ size = 0 }) => (
+            <span style={{ color: "#cccccc" }}>
+              ({(size / 1024 / 1024).toFixed(2)}MB)
+            </span>
+          ),
+          showRemoveIcon: true,
+          removeIcon: <DeleteOutlined style={{ color: "white" }} />,
+        }}
       >
         <Button icon={<UploadOutlined />}>Upload Payment Receipt</Button>
       </Upload>

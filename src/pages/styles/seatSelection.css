@@ -1,6 +1,7 @@
 .seat-selection-page {
   color: white;
   text-align: center;
+  min-height: 100vh;
   padding: 20px;
   background-color: black;
 }
@@ -31,7 +32,7 @@
 }
 
 .seating-chart::-webkit-scrollbar-thumb {
-  background-color: pink;
+  background-color: #f2badc;
 }
 
 .seat-row {
@@ -111,7 +112,7 @@
 }
 
 .next-button {
-  background-color: pink;
+  background-color: #f2badc;
   padding: 10px;
   border: none;
   border-radius: 20px;

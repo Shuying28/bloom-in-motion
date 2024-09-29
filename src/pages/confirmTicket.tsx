@@ -11,6 +11,20 @@ const ConfirmTicket: React.FC = () => {
   const [confirm, setConfirm] = useState(false);
 
   useEffect(() => {
+    // Retrieve checked state and payment method from session storage
+    const storedChecked = sessionStorage.getItem("termsAccepted");
+    const storedPaymentMethod = sessionStorage.getItem("paymentMethod");
+
+    if (storedChecked) {
+      setChecked(JSON.parse(storedChecked));
+    }
+
+    if (storedPaymentMethod) {
+      setPaymentMethod(storedPaymentMethod);
+    }
+  }, []);
+
+  useEffect(() => {
     if (checked && paymentMethod) {
       setConfirm(true);
     }
@@ -18,23 +32,25 @@ const ConfirmTicket: React.FC = () => {
 
   const handleCheckboxChange = () => {
     setChecked(!checked);
+    sessionStorage.setItem("termsAccepted", JSON.stringify(!checked));
   };
 
   const handlePaymentSelection = (method: string) => {
     setPaymentMethod(method);
+    sessionStorage.setItem("paymentMethod", JSON.stringify(method));
   };
 
   return (
     <div className="confirm-ticket-page">
       <h2>Confirm Ticket</h2>
       <div className="ticket-info">
-        <h3>Seats(s)</h3>
-        <p>{selectedSeats.join(", ")}</p>
+        <h3 className="info-title">Seats(s)</h3>
+        <p className="p">{selectedSeats.join(", ")}</p>
       </div>
       <hr style={{ border: "1px solid #ccc", margin: "10px 0" }} />
       <div className="ticket-info">
         <h3>Total Price</h3>
-        <p>RM {totalPrice}</p>
+        <p className="p">RM {totalPrice}</p>
       </div>
       <hr style={{ border: "1px solid #ccc", margin: "10px 0" }} />
       <div className="payment-options">

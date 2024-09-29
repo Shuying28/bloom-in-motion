@@ -2,6 +2,7 @@
   background-color: #181414;
   color: white;
   padding: 20px;
+  min-height: 100vh;
 }
 
 h2 {
@@ -15,14 +16,14 @@ h2 {
   margin-bottom: 20px;
 }
 
-h3 {
+.info-title {
   font-size: 1.2em;
   margin-bottom: 10px;
 }
 
-p {
+.p {
   font-size: 1em;
-  color: #e58989;
+  color: #db9595;
 }
 
 .ticket-info p {
@@ -67,7 +68,7 @@ p {
 }
 
 .next-button {
-  background-color: pink;
+  background-color: #f2badc;
   padding: 10px;
   color: white;
   border: none;
@@ -80,7 +81,7 @@ p {
 }
 
 .next-button:hover {
-  background-color: #e5a7c1;
+  background-color: #c87899;
 }
 
 @media screen and (max-width: 600px) {

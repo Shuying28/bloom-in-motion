@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/seatSelection.css";
 import { useNavigate } from "react-router-dom";
+import { firestore } from "../firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 const SeatSelection: React.FC = () => {
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+  const [reservedSeats, setReservedSeats] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
 
@@ -44,6 +48,46 @@ const SeatSelection: React.FC = () => {
     C: 20,
   };
 
+  const fetchReservedSeats = async () => {
+    const reservedSeats: string[] = [];
+
+    try {
+      const querySnapshot = await getDocs(collection(firestore, "payments"));
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        reservedSeats.push(...(data.selectedSeats || []));
+      });
+    } catch (error) {
+      console.error("Error fetching reserved seats: ", error);
+    } finally {
+      setLoading(false);
+    }
+
+    return reservedSeats;
+  };
+
+  useEffect(() => {
+    // Retrieve reserved seats from Firestore
+    const loadReservedSeats = async () => {
+      const reserved = await fetchReservedSeats();
+      setReservedSeats(reserved);
+    };
+
+    loadReservedSeats();
+
+    // Retrieve selectedSeats and totalPrice from session storage
+    const storedSelectedSeats = sessionStorage.getItem("selectedSeats");
+    const storedTotalPrice = sessionStorage.getItem("totalPrice");
+
+    if (storedSelectedSeats) {
+      setSelectedSeats(JSON.parse(storedSelectedSeats));
+    }
+
+    if (storedTotalPrice) {
+      setTotalPrice(JSON.parse(storedTotalPrice));
+    }
+  }, []);
+
   const isEarlyBird = (): boolean => {
     const today = new Date();
     const earlyBirdStart = new Date(today.getFullYear(), 9, 1); // 1/10
@@ -73,6 +117,8 @@ const SeatSelection: React.FC = () => {
 
     setSelectedSeats(updatedSeats);
     setTotalPrice(updatedPrice);
+    sessionStorage.setItem("selectedSeats", JSON.stringify(updatedSeats));
+    sessionStorage.setItem("totalPrice", JSON.stringify(updatedPrice));
   };
 
   const generateSeatNumbers = (rowCount: number) => {
@@ -104,16 +150,18 @@ const SeatSelection: React.FC = () => {
       const seatRow = seatNumbers.map((seatNum) => {
         const seatCode = `${zone}${row}-${seatNum}`;
         const isSelected = selectedSeats.includes(seatCode);
+        const isReserved = reservedSeats.includes(seatCode);
 
         return (
           <div
             key={seatCode}
             className={`seat ${zones[zone as keyof typeof zones].color} ${
               isSelected ? "selected" : ""
-            }`}
+            } ${isReserved ? "reserved" : ""}`} // Add "reserved" class
             onClick={() => handleSeatClick(zone!, row, seatNum)}
+            style={isReserved ? { cursor: "not-allowed" } : {}}
           >
-            {seatNum} {/* Render seat number */}
+            {seatNum}
           </div>
         );
       });
@@ -132,7 +180,12 @@ const SeatSelection: React.FC = () => {
     <div className="seat-selection-page">
       <h2>Select Seats</h2>
       <div className="stage">STAGE</div>
-      <div className="seating-chart">{renderSeats()}</div>
+
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <div className="seating-chart">{renderSeats()}</div>
+      )}
 
       <div className="legend">
         <div style={{ marginBottom: "20px" }}>

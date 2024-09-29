@@ -12,8 +12,8 @@ const Success: React.FC = () => {
       <div className="icon-container">
         <CheckCircleOutlined className="check-icon" />
       </div>
-      <h2>You’re All Set!</h2>
-      <p>Thanks for purchasing the ticket from us :)</p>
+      <h2 className="success-title">You’re All Set!</h2>
+      <p className="success-info">Thanks for purchasing the ticket from us :)</p>
       <Button
         type="primary"
         shape="round"

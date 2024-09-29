@@ -2,6 +2,7 @@
   background-color: #191919;
   color: white;
   text-align: center;
+  min-height: 100vh;
   font-family: "Arial", sans-serif;
 }
 
@@ -24,31 +25,38 @@
   border-radius: 50%;
 }
 
-.ticket-section {
+.image-container {
   position: relative;
-  padding: 100px 0;
-  background-color: #e0e0e0;
+  display: inline-block; /* This ensures the container wraps around the image */
 }
 
-.absolute-img {
+.landing-img {
+  width: 100%;
+  display: block; /* Prevents small gaps under the image */
+}
+
+.ticket-button {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%; /* Adjust as needed */
-  height: 100%; /* Adjust as needed */
-  object-fit: cover; /* Ensure the image covers the section */
+  bottom: -18px; /* Adjusts the vertical spacing from the bottom of the image */
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .buy-ticket-button {
   background-color: #ffb6c1;
   border: none;
-  padding: 10px 40px;
+  width: 30%;
+}
+
+.buy-ticket-button:hover {
+  background-color: #c87899 !important;
 }
 
 .about-section,
 .event-section,
 .past-events-section {
-  padding: 60px 20px;
+  padding: 80px 20px;
   color: white;
 }
 

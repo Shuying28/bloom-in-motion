@@ -15,41 +15,43 @@ const Home: React.FC = () => {
       <div className="header">
         <div className="logo">
           <img
-            src={require("../assets/logo.png")} // Replace with actual logo path
+            src={require("../assets/logo.png")}
             alt="logo"
             className="logo-image"
           />
-          <h2>XMUM Dance Club</h2>
+          <h3>XMUM Dance Club</h3>
         </div>
       </div>
 
       {/* Main Content */}
       <Content>
         {/* Buy Ticket Section */}
-        <section className="ticket-section">
-          <img
-            src={require("../assets/img1.png")}
-            alt="Background"
-            className="absolute-img"
-          />
+        <section>
           <Row justify="center">
             <Col>
-              <motion.div
-                className="ticket-button"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                <Button
-                  type="primary"
-                  shape="round"
-                  size="large"
-                  className="buy-ticket-button"
-                  onClick={() => navigate("/seatselection")}
+              <div className="image-container">
+                <img
+                  src={require("../assets/landing_pic.png")}
+                  alt="Background"
+                  className="landing-img"
+                />
+                <motion.div
+                  className="ticket-button"
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
                 >
-                  Buy Ticket
-                </Button>
-              </motion.div>
+                  <Button
+                    type="primary"
+                    shape="round"
+                    size="large"
+                    className="buy-ticket-button"
+                    onClick={() => navigate("/seatselection")}
+                  >
+                    Buy Ticket
+                  </Button>
+                </motion.div>
+              </div>
             </Col>
           </Row>
         </section>
@@ -62,11 +64,16 @@ const Home: React.FC = () => {
             transition={{ duration: 0.8 }}
           >
             <h2>ABOUT US</h2>
+            <img
+              style={{ width: "40%" }}
+              src={require("../assets/abt_us.png")}
+              alt="TnG QR Code"
+            />
             <p>
-              Founded in 2016, XMUM Dance Club provides a vibrant platform for
+              Founded in 2016, XMUM Dance Club provide a vibrant platform for
               students to express themselves through the art of dance. Our club
               embraces a wide range of dance styles, including all street style,
-              K-pop, traditional dance, and more, making our club a vibrant and
+              k-pop, traditional dance and so on, making our club a vibrant and
               diverse community.
             </p>
           </motion.div>
@@ -115,7 +122,7 @@ const Home: React.FC = () => {
               >
                 <img src={require("../assets/wa_icon.png")} alt="WhatsApp" />
               </a>
-              <div>@xmumdc_concert</div>
+              <div style={{ marginTop: "12px" }}>@xmumdc_concert</div>
             </div>
           </Col>
         </Row>
