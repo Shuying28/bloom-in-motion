@@ -21,8 +21,8 @@ interface SendEmailResponse {
     error?: string;
 }
 
-exports.sendEmail = functions.https.onCall((data: SendEmailData, context: functions.https.CallableContext): Promise<SendEmailResponse> => {
-    const { name, studentID, campusEmail, selectedSeats, totalPrice, paymentMethod } = data;
+exports.sendEmail = functions.https.onCall((request: functions.https.CallableRequest<SendEmailData>): Promise<SendEmailResponse> => {
+    const { name, studentID, campusEmail, selectedSeats, totalPrice, paymentMethod } = request.data;
 
     const msg = {
         to: campusEmail,
