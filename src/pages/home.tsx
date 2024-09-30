@@ -150,7 +150,7 @@ const Home: React.FC = () => {
           >
             <h2>Past Events</h2>
             <a
-              href="https://www.youtube.com/@xmumdanceclub2749/featured"
+              href="https://youtu.be/HPuA0AjWb6A"
               target="_blank"
               rel="noopener noreferrer"
             >
