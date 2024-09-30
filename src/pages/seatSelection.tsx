@@ -148,9 +148,12 @@ const SeatSelection: React.FC = () => {
       );
 
       const seatRow = seatNumbers.map((seatNum) => {
-        const seatCode = `${zone}${row}-${seatNum}`;
+        const seatCode = `${zone}${row}-${seatNum < 10 ? `0${seatNum}` : seatNum}`;
         const isSelected = selectedSeats.includes(seatCode);
         const isReserved = reservedSeats.includes(seatCode);
+        console.log(seatCode);
+        console.log(isReserved);
+        console.log(isSelected);
 
         return (
           <div

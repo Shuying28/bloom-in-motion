@@ -95,10 +95,72 @@ const Home: React.FC = () => {
           </motion.div>
         </section>
 
+        {/* Ticket Pricing Section */}
+        <section className="past-events-section">
+          <motion.div
+            className="event-info"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2>Ticketing & Pricing</h2>
+            <Row justify="center" className="image-row">
+              <Col>
+                <img
+                  style={{ width: "60%" }}
+                  src={require("../assets/1-3.jpg")}
+                  alt="Ticket price"
+                />
+              </Col>
+              <Col>
+                <img
+                  style={{ width: "60%" }}
+                  src={require("../assets/2-3.png")}
+                  alt="Ticket price"
+                />
+              </Col>
+            </Row>
+          </motion.div>
+        </section>
+
+        {/* Seat Layout Section */}
+        <section className="past-events-section">
+          <motion.div
+            className="event-info"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2>Seating Layout</h2>
+            <img
+              style={{ width: "60%" }}
+              src={require("../assets/0-3.jpg")}
+              alt="Seat Layout"
+            />
+          </motion.div>
+        </section>
+
         {/* Past Events Section */}
         <section className="past-events-section">
-          <h2>Past Events</h2>
-          {/* Insert past event images here */}
+          <motion.div
+            className="event-info"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2>Past Events</h2>
+            <a
+              href="https://www.youtube.com/@xmumdanceclub2749/featured"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                style={{ width: "100%" }}
+                src={require("../assets/past_event.png")}
+                alt="Past Event"
+              />
+            </a>
+          </motion.div>
         </section>
       </Content>
 
@@ -106,7 +168,9 @@ const Home: React.FC = () => {
       <Footer className="footer">
         <Row justify="center" className="footer-row">
           <Col>
-            <p>Need Help? Contact Us!</p>
+            <p style={{ paddingBottom: "12px", fontSize: "18px" }}>
+              Need Help? Contact Us!
+            </p>
             <div className="social-icons">
               <a
                 href="https://www.instagram.com/xmumdc_concert"

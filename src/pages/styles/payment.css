@@ -43,6 +43,12 @@
   width: 30%;
 }
 
+@media screen and (max-width: 600px) {
+  .payment-page .ant-btn-primary {
+    width: 50%;
+  }
+}
+
 .payment-page .ant-btn-primary:hover {
   background-color: #c87899 !important;
 }

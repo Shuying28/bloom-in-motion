@@ -11,6 +11,7 @@ import {
 import { firestore } from "../firebase";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid"; // For unique file names
+import { getFunctions, httpsCallable } from "firebase/functions";
 import "./styles/payment.css";
 
 interface formData {
@@ -153,7 +154,14 @@ const Payment: React.FC = () => {
               paymentMethod,
             });
             message.success("Payment details submitted successfully!");
-            navigate("/success");
+            navigate("/success", {
+              state: {
+                formData,
+                selectedSeats,
+                totalPrice,
+                paymentMethod,
+              },
+            });
             sessionStorage.clear();
           } catch (error) {
             message.error("Error submitting form: " + error);
