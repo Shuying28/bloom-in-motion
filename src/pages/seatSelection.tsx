@@ -90,8 +90,8 @@ const SeatSelection: React.FC = () => {
 
   const isEarlyBird = (): boolean => {
     const today = new Date();
-    const earlyBirdStart = new Date(today.getFullYear(), 9, 1); // 1/10
-    const earlyBirdEnd = new Date(today.getFullYear(), 9, 10); // 10/10
+    const earlyBirdStart = new Date(today.getFullYear(), 9, 2); // 2/10
+    const earlyBirdEnd = new Date(today.getFullYear(), 9, 11); // 11/10
 
     return today >= earlyBirdStart && today <= earlyBirdEnd;
   };
@@ -148,7 +148,9 @@ const SeatSelection: React.FC = () => {
       );
 
       const seatRow = seatNumbers.map((seatNum) => {
-        const seatCode = `${zone}${row}-${seatNum < 10 ? `0${seatNum}` : seatNum}`;
+        const seatCode = `${zone}${row}-${
+          seatNum < 10 ? `0${seatNum}` : seatNum
+        }`;
         const isSelected = selectedSeats.includes(seatCode);
         const isReserved = reservedSeats.includes(seatCode);
         console.log(seatCode);
