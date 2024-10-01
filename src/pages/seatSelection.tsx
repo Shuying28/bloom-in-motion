@@ -3,6 +3,7 @@ import "./styles/seatSelection.css";
 import { useNavigate } from "react-router-dom";
 import { firestore } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
+import "./styles/common.css";
 
 const SeatSelection: React.FC = () => {
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
@@ -230,7 +231,7 @@ const SeatSelection: React.FC = () => {
             })
           }
         >
-          Next
+          <span>Next</span>
         </button>
       </div>
     </div>

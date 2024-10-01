@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./styles/confirmTicket.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import "./styles/common.css";
 
 const ConfirmTicket: React.FC = () => {
   const navigate = useNavigate();
@@ -56,13 +57,16 @@ const ConfirmTicket: React.FC = () => {
       <div className="payment-options">
         <h3>Payment Option</h3>
         <label>
-          <input
-            type="radio"
-            name="paymentMethod"
-            checked={paymentMethod === "Bank Transfer"}
-            onChange={() => handlePaymentSelection("Bank Transfer")}
-          />
-          Bank Transfer
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <input
+              type="radio"
+              name="paymentMethod"
+              checked={paymentMethod === "Bank Transfer"}
+              onChange={() => handlePaymentSelection("Bank Transfer")}
+              className="custom-radio"
+            />
+            <span style={{ marginTop: "3px" }}>Bank Transfer</span>
+          </div>
           <div className="bank-info">
             <p>Loie Xin Tung</p>
             <p>1648 5618 2039</p>
@@ -73,13 +77,16 @@ const ConfirmTicket: React.FC = () => {
           </div>
         </label>
         <label>
-          <input
-            type="radio"
-            name="paymentMethod"
-            checked={paymentMethod === "Touch 'n Go eWallet"}
-            onChange={() => handlePaymentSelection("Touch 'n Go eWallet")}
-          />
-          Touch 'n Go eWallet
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <input
+              type="radio"
+              name="paymentMethod"
+              checked={paymentMethod === "Touch 'n Go eWallet"}
+              onChange={() => handlePaymentSelection("Touch 'n Go eWallet")}
+              className="custom-radio"
+            />
+            <span style={{ marginTop: "3px" }}>Touch 'n Go eWallet</span>
+          </div>
           <div className="tng-info">
             <p>Ngo Yun Shuang</p>
             <p>+6019-775 5905</p>
@@ -157,7 +164,7 @@ const ConfirmTicket: React.FC = () => {
             })
           }
         >
-          Next
+          <span>Next</span>
         </button>
       </div>
     </div>

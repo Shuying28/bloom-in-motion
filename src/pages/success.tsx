@@ -3,6 +3,7 @@ import { Button } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import "./styles/success.css";
+import "./styles/common.css";
 
 const Success: React.FC = () => {
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ const Success: React.FC = () => {
         className="home-button"
         onClick={() => navigate("/")}
       >
-        Back To Home
+        <span>Back To Home</span>
       </Button>
       <p className="ss">
         Please take a screenshot of this page and keep it as a record before

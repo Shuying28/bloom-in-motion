@@ -13,6 +13,7 @@ import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid"; // For unique file names
 import { getFunctions, httpsCallable } from "firebase/functions";
 import "./styles/payment.css";
+import "./styles/common.css";
 
 interface formData {
   name: string;
@@ -146,6 +147,7 @@ const Payment: React.FC = () => {
           // Save the form data to Firestore
           const docRef = doc(firestore, "payments", uuidv4());
           try {
+            console.log("Submitting form data...");
             await setDoc(docRef, {
               ...formData,
               receiptUrl: downloadURL,
@@ -171,6 +173,7 @@ const Payment: React.FC = () => {
         }
       );
     } catch (error) {
+      console.error("Error submitting form: ", error);
       message.error("Error submitting form: " + error);
       setIsLoading(false);
     }
@@ -178,11 +181,10 @@ const Payment: React.FC = () => {
 
   return (
     <div className="payment-page">
-      <h1>Payment</h1>
+      <h2>Payment</h2>
       <label htmlFor="name">Name (as Per NRIC)</label>
       <Input
         id="name"
-        placeholder="Name (as Per NRIC)"
         name="name"
         value={formData.name}
         onChange={handleInputChange}
@@ -191,7 +193,6 @@ const Payment: React.FC = () => {
       <label htmlFor="studentID">Student ID</label>
       <Input
         id="studentID"
-        placeholder="Student ID"
         name="studentID"
         value={formData.studentID}
         onChange={handleInputChange}
@@ -200,7 +201,6 @@ const Payment: React.FC = () => {
       <label htmlFor="campusEmail">Campus Email</label>
       <Input
         id="campusEmail"
-        placeholder="Campus Email"
         name="campusEmail"
         value={formData.campusEmail}
         onChange={handleInputChange}
@@ -209,7 +209,6 @@ const Payment: React.FC = () => {
       <label htmlFor="contactNo">Contact No.</label>
       <Input
         id="contactNo"
-        placeholder="Contact No."
         name="contactNo"
         value={formData.contactNo}
         onChange={handleInputChange}
@@ -255,7 +254,7 @@ const Payment: React.FC = () => {
           loading={isLoading}
           style={{ marginTop: "20px" }}
         >
-          Confirm
+          <span>Confirm</span>
         </Button>
       </div>
     </div>

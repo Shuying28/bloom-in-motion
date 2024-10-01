@@ -6,6 +6,11 @@
   background-color: black;
 }
 
+.seat-selection-page div {
+  font-family: "Jura", sans-serif;
+  font-weight: 600;
+}
+
 .stage {
   background-color: purple;
   padding: 10px;

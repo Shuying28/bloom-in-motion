@@ -1,9 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Junge&display=swap");
+
+.logo h3 {
+  font-family: "Junge", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .landing-page {
   background-color: #191919;
   color: white;
   text-align: center;
   min-height: 100vh;
-  font-family: "Arial", sans-serif;
 }
 
 .header {
@@ -53,7 +60,11 @@
   background-color: #c87899 !important;
 }
 
-.about-section,
+.about-section {
+  padding: 120px 20px;
+  color: white;
+}
+
 .event-section {
   padding: 80px 20px;
   color: white;
@@ -64,7 +75,7 @@
 }
 
 .about-section h2,
-.event-section h3,
+.event-section h2,
 .past-events-section h2 {
   color: #ffb6c1;
 }
@@ -79,6 +90,30 @@
   text-align: center;
 }
 
+.partners-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0 0;
+}
+
+.partner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  margin: 0 20px;
+}
+
+.partner-logo {
+  width: 80px;
+  height: 80px;
+}
+
+.cross {
+  margin: 0 20px;
+}
+
 .social-icons img {
   width: 40px;
   margin: 0 12px;
@@ -88,4 +123,52 @@
   display: flex;
   justify-content: center;
   gap: 20px;
+}
+
+.contact-us {
+  padding-bottom: 12px;
+  font-size: 18px;
+}
+
+.contact-us.jura {
+  font-size: 18px;
+}
+
+@media screen and (max-width: 670px) {
+  .header {
+    padding: 0 1rem;
+  }
+
+  .partner-logo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .partner .jura {
+    font-size: 12px;
+  }
+
+  .partner {
+    margin: 0;
+  }
+
+  .partners-container {
+    padding: 0;
+  }
+
+  .about-section {
+    padding: 120px 20px 30px;
+  }
+
+  .event-section {
+    padding: 80px 20px 30px;
+  }
+
+  .past-events-section {
+    padding: 30px 0;
+  }
+
+  .contact-us {
+    padding-bottom: 6px;
+  }
 }

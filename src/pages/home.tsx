@@ -3,6 +3,7 @@ import { Button, Layout, Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./styles/home.css";
+import "./styles/common.css";
 
 const { Content, Footer } = Layout;
 
@@ -48,7 +49,7 @@ const Home: React.FC = () => {
                     className="buy-ticket-button"
                     onClick={() => navigate("/seatselection")}
                   >
-                    Buy Ticket
+                    <span>Buy Ticket</span>
                   </Button>
                 </motion.div>
               </div>
@@ -64,11 +65,31 @@ const Home: React.FC = () => {
             transition={{ duration: 0.8 }}
           >
             <h2>ABOUT US</h2>
-            <img
-              style={{ width: "40%" }}
-              src={require("../assets/abt_us.png")}
-              alt="TnG QR Code"
-            />
+            <div className="partners-container">
+              <div className="partner">
+                <img
+                  src={require("../assets/xmum_dance_club.png")}
+                  alt="XMUM Dance Club"
+                  className="partner-logo"
+                />
+                <p className="jura">XMUM Dance Club</p>
+              </div>
+
+              <img
+                src={require("../assets/x.png")}
+                alt="XMUM Dance Club"
+                className="cross"
+              />
+
+              <div className="partner">
+                <img
+                  src={require("../assets/bloom_in_motion.png")}
+                  alt="Bloom In Motion"
+                  className="partner-logo"
+                />
+                <p className="jura">Bloom In Motion</p>
+              </div>
+            </div>
             <p>
               Founded in 2016, XMUM Dance Club provide a vibrant platform for
               students to express themselves through the art of dance. Our club
@@ -87,7 +108,7 @@ const Home: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h3>Bloom in Motion: Embrace Your True Self</h3>
+            <h2>Bloom in Motion: Embrace Your True Self</h2>
             <p>
               Join us for an unforgettable night where dance becomes the
               language of self-expression and transformation!
@@ -168,8 +189,10 @@ const Home: React.FC = () => {
       <Footer className="footer">
         <Row justify="center" className="footer-row">
           <Col>
-            <p style={{ paddingBottom: "12px", fontSize: "18px" }}>
-              Need Help? Contact Us!
+            <p className="contact-us jura">
+              Need Help?
+              <br />
+              Contact Us!
             </p>
             <div className="social-icons">
               <a
@@ -186,7 +209,7 @@ const Home: React.FC = () => {
               >
                 <img src={require("../assets/wa_icon.png")} alt="WhatsApp" />
               </a>
-              <div style={{ marginTop: "12px" }}>@xmumdc_concert</div>
+              <div className="jura" style={{ marginTop: "30px" }}>@xmumdc_concert</div>
             </div>
           </Col>
         </Row>
