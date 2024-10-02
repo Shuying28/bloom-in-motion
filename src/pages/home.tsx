@@ -271,7 +271,7 @@ const Home: React.FC = () => {
                 <img src={require("../assets/ig_icon.png")} alt="Instagram" />
               </a>
               <a
-                href="https://wa.me/123456789"
+                href="https://wa.me/135333198"
                 target="_blank"
                 rel="noopener noreferrer"
               >

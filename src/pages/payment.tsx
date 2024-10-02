@@ -3,15 +3,13 @@ import { Button, Input, Upload, message } from "antd";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  getStorage,
   ref,
-  uploadBytesResumable,
   getDownloadURL,
+  uploadBytes,
 } from "firebase/storage";
-import { firestore } from "../firebase";
+import { firestore, imageStorage } from "../firebase";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid"; // For unique file names
-import { getFunctions, httpsCallable } from "firebase/functions";
 import "./styles/payment.css";
 import "./styles/common.css";
 
@@ -46,7 +44,6 @@ const Payment: React.FC = () => {
   // });
   const [imageUpload, setImageUpload] = useState<File | null>(null);
   const navigate = useNavigate();
-  const storage = getStorage();
 
   const fetchReservedSeats = async () => {
     const reservedSeats: string[] = [];
@@ -102,7 +99,8 @@ const Payment: React.FC = () => {
 
   const handleFileChange = (info: any) => {
     if (info.fileList.length > 0) {
-      setImageUpload(info.fileList[0]);
+      /* If you're using Ant Design's Upload component, make sure you're correctly accessing the originFileObj from info.fileList when handling the upload.**/
+      setImageUpload(info.fileList[0].originFileObj);
     } else {
       setImageUpload(null);
     }
@@ -131,54 +129,45 @@ const Payment: React.FC = () => {
     checkCrashedSeats();
     setIsLoading(true);
     try {
-      // Upload the receipt image to Firebase Storage
+      // Step 1: Upload the receipt image to Firebase Storage using uploadBytes
       const imageRef = ref(
-        storage,
-        `receipts/${uuidv4()}_${imageUpload?.name}`
+        imageStorage,
+        `receipts/${imageUpload.name}_${uuidv4()}`
       );
       const metadata = {
         contentType: imageUpload.type,
       };
-      const uploadTask = uploadBytesResumable(imageRef, imageUpload, metadata);
+      const uploadResult = await uploadBytes(imageRef, imageUpload, metadata);
 
-      uploadTask.on(
-        "state_changed",
-        () => {},
-        (error) => {
-          message.error("Failed to upload receipt: " + error.message);
-          setIsLoading(false);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          setFormData({ ...formData, receiptUrl: downloadURL });
+      // Step 2: Get the download URL of the uploaded file
+      const downloadURL = await getDownloadURL(uploadResult.ref);
+      setFormData({ ...formData, receiptUrl: downloadURL });
 
-          // Save the form data to Firestore
-          const docRef = doc(firestore, "payments", uuidv4());
-          try {
-            await setDoc(docRef, {
-              ...formData,
-              receiptUrl: downloadURL,
-              selectedSeats,
-              totalPrice,
-              paymentMethod,
-            });
-            message.success("Payment details submitted successfully!");
-            navigate("/success", {
-              state: {
-                formData,
-                selectedSeats,
-                totalPrice,
-                paymentMethod,
-              },
-            });
-            sessionStorage.clear();
-          } catch (error) {
-            message.error("Error submitting form: " + error);
-          } finally {
-            setIsLoading(false);
-          }
-        }
-      );
+      // Step 3: Save the form data and uploaded receipt to Firestore
+      const docRef = doc(firestore, "payments", uuidv4());
+      try {
+        await setDoc(docRef, {
+          ...formData,
+          receiptUrl: downloadURL,
+          selectedSeats,
+          totalPrice,
+          paymentMethod,
+        });
+        message.success("Payment details submitted successfully!");
+        navigate("/success", {
+          state: {
+            formData,
+            selectedSeats,
+            totalPrice,
+            paymentMethod,
+          },
+        });
+        sessionStorage.clear();
+      } catch (firestoreError) {
+        message.error("Error submitting form: " + firestoreError);
+      } finally {
+        setIsLoading(false);
+      }
     } catch (error) {
       message.error("Error submitting form: " + error);
       setIsLoading(false);
