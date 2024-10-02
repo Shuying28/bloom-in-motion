@@ -40,11 +40,11 @@ const Payment: React.FC = () => {
           receiptUrl: "",
         };
   });
-  // const [file, setFile] = useState<File | null>(() => {
+  // const [file, setImageUpload] = useState<File | null>(() => {
   //   const storedFile = sessionStorage.getItem("file");
   //   return storedFile ? JSON.parse(storedFile) : null;
   // });
-  const [file, setFile] = useState<File | null>(null);
+  const [imageUpload, setImageUpload] = useState<File | null>(null);
   const navigate = useNavigate();
   const storage = getStorage();
 
@@ -102,23 +102,28 @@ const Payment: React.FC = () => {
 
   const handleFileChange = (info: any) => {
     if (info.fileList.length > 0) {
-      setFile(info.fileList[0]);
+      setImageUpload(info.fileList[0]);
     } else {
-      setFile(null);
+      setImageUpload(null);
     }
   };
 
   const handleConfirm = async () => {
     if (
       !formData.name ||
-      !formData.studentID ||
       !formData.campusEmail ||
       !formData.contactNo ||
-      !file
+      !imageUpload
     ) {
       message.error(
-        "Please fill in all fields and upload the payment receipt."
+        "Please fill in all the required fields and upload the payment receipt."
       );
+      setIsLoading(false);
+      return;
+    }
+
+    if (!selectedSeats || selectedSeats.length === 0) {
+      message.error("No seats selected!");
       setIsLoading(false);
       return;
     }
@@ -127,11 +132,14 @@ const Payment: React.FC = () => {
     setIsLoading(true);
     try {
       // Upload the receipt image to Firebase Storage
-      const storageRef = ref(storage, `receipts/${uuidv4()}_${file?.name}`);
+      const imageRef = ref(
+        storage,
+        `receipts/${uuidv4()}_${imageUpload?.name}`
+      );
       const metadata = {
-        contentType: file.type,
+        contentType: imageUpload.type,
       };
-      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+      const uploadTask = uploadBytesResumable(imageRef, imageUpload, metadata);
 
       uploadTask.on(
         "state_changed",
@@ -147,7 +155,6 @@ const Payment: React.FC = () => {
           // Save the form data to Firestore
           const docRef = doc(firestore, "payments", uuidv4());
           try {
-            console.log("Submitting form data...");
             await setDoc(docRef, {
               ...formData,
               receiptUrl: downloadURL,
@@ -173,7 +180,6 @@ const Payment: React.FC = () => {
         }
       );
     } catch (error) {
-      console.error("Error submitting form: ", error);
       message.error("Error submitting form: " + error);
       setIsLoading(false);
     }
@@ -182,7 +188,7 @@ const Payment: React.FC = () => {
   return (
     <div className="payment-page">
       <h2>Payment</h2>
-      <label htmlFor="name">Name (as Per NRIC)</label>
+      <label htmlFor="name">Name (as Per NRIC)*</label>
       <Input
         id="name"
         name="name"
@@ -196,9 +202,9 @@ const Payment: React.FC = () => {
         name="studentID"
         value={formData.studentID}
         onChange={handleInputChange}
-        style={{ marginBottom: "10px" }}
       />
-      <label htmlFor="campusEmail">Campus Email</label>
+      <p className="remark">*only for XMUM students</p>
+      <label htmlFor="campusEmail">Email*</label>
       <Input
         id="campusEmail"
         name="campusEmail"
@@ -206,7 +212,7 @@ const Payment: React.FC = () => {
         onChange={handleInputChange}
         style={{ marginBottom: "10px" }}
       />
-      <label htmlFor="contactNo">Contact No.</label>
+      <label htmlFor="contactNo">Contact No.*</label>
       <Input
         id="contactNo"
         name="contactNo"
@@ -214,19 +220,19 @@ const Payment: React.FC = () => {
         onChange={handleInputChange}
         style={{ marginBottom: "10px" }}
       />
-      <label htmlFor="receipt">Payment Receipt</label>
+      <label htmlFor="receipt">Payment Receipt*</label>
       <Upload
         id="receipt"
-        beforeUpload={(file) => {
+        beforeUpload={(imageUpload) => {
           const validTypes = ["image/png", "image/jpg", "image/jpeg"];
-          if (!validTypes.includes(file.type)) {
+          if (!validTypes.includes(imageUpload.type)) {
             message.error("Please upload a file of type PNG, JPG, or JPEG!");
             return Upload.LIST_IGNORE;
           }
           return false;
         }}
         onRemove={() => {
-          setFile(null);
+          setImageUpload(null);
           // sessionStorage.setItem("file", "");
         }}
         onChange={handleFileChange}

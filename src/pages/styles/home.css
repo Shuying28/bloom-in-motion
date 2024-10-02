@@ -94,7 +94,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 0 0;
+  padding: 20px 0;
 }
 
 .partner {
@@ -134,7 +134,52 @@
   font-size: 18px;
 }
 
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.carousel-slide {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.carousel-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.carousel-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  width: 85%;
+  max-width: 100%;
+}
+
+.carousel-text p {
+  margin: 0;
+  font-weight: bold;
+  font-size: 14px;
+}
+
 @media screen and (max-width: 670px) {
+  .carousel-text p {
+    font-size: 12px;
+  }
+
+  .partners-container {
+    padding: 20px;
+  }
+
   .header {
     padding: 0 1rem;
   }
@@ -152,12 +197,8 @@
     margin: 0;
   }
 
-  .partners-container {
-    padding: 0;
-  }
-
   .about-section {
-    padding: 120px 20px 30px;
+    padding: 120px 0 30px;
   }
 
   .event-section {

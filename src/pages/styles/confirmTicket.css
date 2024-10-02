@@ -115,6 +115,12 @@ h2 {
   margin-top: 10px;
 }
 
+.payment-info {
+  color: #b8b8b8;
+  font-size: 12px;
+  font-style: italic;
+}
+
 .next-button {
   background-color: #f2badc;
   padding: 10px;

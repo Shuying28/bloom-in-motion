@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./styles/seatSelection.css";
 import { useNavigate } from "react-router-dom";
+import { DoubleRightOutlined } from "@ant-design/icons";
 import { firestore } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import "./styles/common.css";
@@ -13,6 +14,7 @@ const SeatSelection: React.FC = () => {
   const navigate = useNavigate();
 
   const seatCounts = {
+    1: 34,
     2: 35,
     3: 34,
     4: 35,
@@ -29,12 +31,15 @@ const SeatSelection: React.FC = () => {
     15: 34,
     16: 35,
     17: 30,
+    18: 25,
   };
 
   const zones = {
+    R1: { startRow: 1, endRow: 1, color: "reserved" },
     A: { startRow: 2, endRow: 7, color: "red" },
     B: { startRow: 8, endRow: 12, color: "blue" },
     C: { startRow: 13, endRow: 17, color: "green" },
+    R2: { startRow: 18, endRow: 18, color: "reserved" },
   };
 
   const earlyBirdPrices = {
@@ -136,8 +141,10 @@ const SeatSelection: React.FC = () => {
   };
 
   const renderSeats = () => {
-    const seatRows = [];
-    for (let row = 2; row <= 17; row++) {
+    const seatRows: JSX.Element[] = [];
+
+    // Function to generate seat rows
+    const generateSeatRow = (row: number, isFirstOrLastRow: boolean) => {
       const zone = Object.keys(zones).find(
         (key) =>
           row >= zones[key as keyof typeof zones].startRow &&
@@ -153,21 +160,18 @@ const SeatSelection: React.FC = () => {
           seatNum < 10 ? `0${seatNum}` : seatNum
         }`;
         const isSelected = selectedSeats.includes(seatCode);
-        const isReserved = reservedSeats.includes(seatCode);
-        console.log(seatCode);
-        console.log(isReserved);
-        console.log(isSelected);
+        const isReserved = reservedSeats.includes(seatCode) || isFirstOrLastRow;
 
         return (
           <div
             key={seatCode}
             className={`seat ${zones[zone as keyof typeof zones].color} ${
               isSelected ? "selected" : ""
-            } ${isReserved ? "reserved" : ""}`} // Add "reserved" class
-            onClick={() => handleSeatClick(zone!, row, seatNum)}
+            } ${isReserved ? "reserved" : ""}`}
+            onClick={() => !isReserved && handleSeatClick(zone!, row, seatNum)}
             style={isReserved ? { cursor: "not-allowed" } : {}}
           >
-            {seatNum}
+            {!isFirstOrLastRow && seatNum}
           </div>
         );
       });
@@ -178,7 +182,14 @@ const SeatSelection: React.FC = () => {
           <div className="seat-wrapper">{seatRow}</div>
         </div>
       );
+    };
+
+    generateSeatRow(1, true);
+    for (let row = 2; row <= 17; row++) {
+      generateSeatRow(row, false);
     }
+    generateSeatRow(18, true);
+
     return seatRows;
   };
 
@@ -190,7 +201,13 @@ const SeatSelection: React.FC = () => {
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <div className="seating-chart">{renderSeats()}</div>
+        <>
+          <div className="seating-chart">{renderSeats()}</div>
+          <span className="swipe-hint">
+            <DoubleRightOutlined />
+            &nbsp; Swipe left for more
+          </span>
+        </>
       )}
 
       <div className="legend">

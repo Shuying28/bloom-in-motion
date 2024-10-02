@@ -21,9 +21,7 @@ const Success: React.FC = () => {
         Thanks for purchasing the ticket from us :)
       </p>
 
-      <div style={{ color: "#b8b8b8", marginBottom: "12px" }}>
-        ..............................................................................................
-      </div>
+      <hr style={{ width: "100%", border: "1px solid #b8b8b8", margin: "16px 0" }} />
 
       <div className="details-container">
         <p>

@@ -70,6 +70,9 @@ const ConfirmTicket: React.FC = () => {
           <div className="bank-info">
             <p>Loie Xin Tung</p>
             <p>1648 5618 2039</p>
+            <p className="payment-info">
+              *Please remark your payment reference as "XMUM Dance Concert"
+            </p>
             <img
               src={require("../assets/maybank_qr.jpeg")} // Replace with actual logo path
               alt="Bank QR Code"
@@ -90,6 +93,9 @@ const ConfirmTicket: React.FC = () => {
           <div className="tng-info">
             <p>Ngo Yun Shuang</p>
             <p>+6019-775 5905</p>
+            <p className="payment-info">
+              *Please remark your payment reference as "XMUM Dance Concert"
+            </p>
             <img src={require("../assets/tng_qr.jpeg")} alt="TnG QR Code" />
           </div>
         </label>

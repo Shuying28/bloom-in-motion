@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Layout, Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Carousel } from "antd";
 import "./styles/home.css";
 import "./styles/common.css";
 
@@ -90,13 +91,80 @@ const Home: React.FC = () => {
                 <p className="jura">Bloom In Motion</p>
               </div>
             </div>
-            <p>
-              Founded in 2016, XMUM Dance Club provide a vibrant platform for
-              students to express themselves through the art of dance. Our club
-              embraces a wide range of dance styles, including all street style,
-              k-pop, traditional dance and so on, making our club a vibrant and
-              diverse community.
-            </p>
+            <div className="carousel-container">
+              <Carousel autoplay arrows>
+                {/* Slide 1 */}
+                <div className="carousel-slide">
+                  <img
+                    src={require("../assets/img1.png")}
+                    alt="Dance Club Slide 1"
+                    className="carousel-image"
+                  />
+                  <div className="carousel-text">
+                    <p>
+                      Founded in 2016, XMUM Dance Club provide a vibrant
+                      platform for students to express themselves through the
+                      art of dance. Our club embraces a wide range of dance
+                      styles, including all street style, k-pop, traditional
+                      dance and so on, making our club a vibrant and diverse
+                      community.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Slide 2 */}
+                <div className="carousel-slide">
+                  <img
+                    src={require("../assets/img2.png")}
+                    alt="Dance Club Slide 2"
+                    className="carousel-image"
+                  />
+                  <div className="carousel-text">
+                    <p>
+                      On November 22, 2024, we proudly present our highly
+                      anticipated dance concert, “Bloom in Motion: Embrace Your
+                      True Self.” This special event will feature a mix of
+                      exciting dance performances, all tied together by a
+                      heartfelt story. The centerpiece of the concert is a
+                      dramatic narrative that follows the inspiring story of a
+                      protagonist who discovers a deep love for dance.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Slide 3 */}
+                <div className="carousel-slide">
+                  <img
+                    src={require("../assets/img3.png")}
+                    alt="Dance Club Slide 3"
+                    className="carousel-image"
+                  />
+                  <div className="carousel-text">
+                    <p>
+                      Throughout the performance, the main character battles
+                      challenges and criticism, but through resilience, he find
+                      him inner strength, bloom, and reveal his true self on
+                      stage.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Slide 4 */}
+                <div className="carousel-slide">
+                  <img
+                    src={require("../assets/img4.png")}
+                    alt="Dance Club Slide 4"
+                    className="carousel-image"
+                  />
+                  <div className="carousel-text">
+                    <p>
+                      Join us for an unforgettable night where dance becomes the
+                      language of self-expression and transformation!
+                    </p>
+                  </div>
+                </div>
+              </Carousel>
+            </div>
           </motion.div>
         </section>
 
@@ -209,7 +277,9 @@ const Home: React.FC = () => {
               >
                 <img src={require("../assets/wa_icon.png")} alt="WhatsApp" />
               </a>
-              <div className="jura" style={{ marginTop: "30px" }}>@xmumdc_concert</div>
+              <div className="jura" style={{ marginTop: "30px" }}>
+                @xmumdc_concert
+              </div>
             </div>
           </Col>
         </Row>
