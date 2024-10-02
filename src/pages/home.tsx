@@ -169,7 +169,7 @@ const Home: React.FC = () => {
         </section>
 
         {/* Event Info Section */}
-        <section className="event-section">
+        {/* <section className="event-section">
           <motion.div
             className="event-info"
             initial={{ opacity: 0, y: 50 }}
@@ -182,7 +182,7 @@ const Home: React.FC = () => {
               language of self-expression and transformation!
             </p>
           </motion.div>
-        </section>
+        </section> */}
 
         {/* Ticket Pricing Section */}
         <section className="past-events-section">
