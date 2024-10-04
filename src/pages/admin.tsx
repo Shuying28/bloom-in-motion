@@ -32,6 +32,7 @@ const Admin: React.FC = () => {
   const [payments, setPayments] = useState<PaymentData[]>([]);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [loading, setLoading] = useState(true);
   const searchInput = useRef<InputRef>(null);
   type DataIndex = keyof PaymentData;
 
@@ -51,6 +52,8 @@ const Admin: React.FC = () => {
             "An unknown error occurred while fetching payment data."
           );
         }
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -128,7 +131,6 @@ const Admin: React.FC = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: "5%",
       ...getColumnSearchProps("name"),
     },
     {
@@ -141,7 +143,6 @@ const Admin: React.FC = () => {
       title: "Email",
       dataIndex: "campusEmail",
       key: "campusEmail",
-      width: "16%",
       ...getColumnSearchProps("campusEmail"),
     },
     {
@@ -183,7 +184,7 @@ const Admin: React.FC = () => {
       <h2>Payment Records</h2>
       <Table
         className="custom-table"
-        loading={payments.length === 0}
+        loading={loading}
         dataSource={payments}
         columns={columns}
         rowKey="studentID"
