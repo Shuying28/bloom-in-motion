@@ -1,0 +1,47 @@
+.records-page {
+  background-color: #181414;
+  color: white;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.records-page th span,
+.records-page th {
+  font-family: "Kameron", serif;
+  font-optical-sizing: auto;
+  font-weight: bold;
+}
+
+.custom-table .ant-table {
+  background-color: #2c2c2c;
+  color: #fff;
+}
+
+.custom-table .ant-table-thead > tr > th {
+  background-color: #2c2c2c;
+  color: #fff;
+}
+
+.custom-table .ant-table-tbody > tr > td {
+  border-color: #444;
+}
+
+.custom-table .ant-pagination-item {
+  background-color: #2c2c2c;
+}
+
+.custom-table .ant-pagination-item a {
+  color: white;
+}
+
+.custom-table .anticon {
+  color: white;
+}
+
+.custom-table .ant-table-placeholder {
+  background-color: #2c2c2c !important;
+
+  & .ant-empty-description {
+    color: white;
+  }
+}

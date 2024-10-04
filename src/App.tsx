@@ -5,6 +5,7 @@ import SeatSelection from "./pages/seatSelection";
 import ConfirmTicket from "./pages/confirmTicket";
 import Payment from "./pages/payment";
 import Success from "./pages/success";
+import Admin from "./pages/admin";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/confirmTicket" element={<ConfirmTicket />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/success" element={<Success />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </Router>
   );

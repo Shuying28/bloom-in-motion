@@ -285,14 +285,6 @@ const Home: React.FC = () => {
         </Row>
       </Footer>
     </Layout>
-    // <div>
-    //   <h1>Home</h1>
-    //   <form onSubmit={handleSave}>
-    //     <label>Enter message:</label>
-    //     <input type="text" ref={messageRef} />
-    //     <button type="submit">Save</button>
-    //   </form>
-    // </div>
   );
 };
 
