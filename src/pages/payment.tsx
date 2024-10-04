@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Input, Upload, message } from "antd";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  ref,
-  getDownloadURL,
-  uploadBytes,
-} from "firebase/storage";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { firestore, imageStorage } from "../firebase";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid"; // For unique file names

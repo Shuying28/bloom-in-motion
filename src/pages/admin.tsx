@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
+  Checkbox,
   Input,
   InputRef,
   message,
@@ -10,7 +11,7 @@ import {
   TableColumnType,
 } from "antd";
 import { firestore } from "../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import "./styles/common.css";
 import "./styles/admin.css";
 import { SearchOutlined } from "@ant-design/icons";
@@ -18,6 +19,7 @@ import { FilterDropdownProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
 
 interface PaymentData {
+  id: string; // Add document ID for updating
   name: string;
   studentID: string;
   campusEmail: string;
@@ -26,6 +28,7 @@ interface PaymentData {
   paymentMethod: string;
   totalPrice: number;
   receiptUrl: string;
+  isRedeemed: boolean;
 }
 
 const Admin: React.FC = () => {
@@ -40,9 +43,10 @@ const Admin: React.FC = () => {
     const fetchPayments = async () => {
       try {
         const querySnapshot = await getDocs(collection(firestore, "payments"));
-        const paymentsData = querySnapshot.docs.map(
-          (doc) => doc.data() as PaymentData
-        );
+        const paymentsData = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id, // Add document ID for updating
+        })) as PaymentData[];
         setPayments(paymentsData);
       } catch (error) {
         if (error instanceof Error) {
@@ -126,6 +130,31 @@ const Admin: React.FC = () => {
       ),
   });
 
+  const handleRedeemedChange = async (
+    record: PaymentData,
+    checked: boolean
+  ) => {
+    try {
+      const docRef = doc(firestore, "payments", record.id);
+      await updateDoc(docRef, { isRedeemed: checked });
+      setPayments((prevPayments) =>
+        prevPayments.map((payment) =>
+          payment.id === record.id
+            ? { ...payment, isRedeemed: checked }
+            : payment
+        )
+      );
+    } catch (error) {
+      if (error instanceof Error) {
+        message.error(`Failed to update redeemed status: ${error.message}`);
+      } else {
+        message.error(
+          "An unknown error occurred while updating redeemed status."
+        );
+      }
+    }
+  };
+
   const columns: TableColumnsType<PaymentData> = [
     {
       title: "Name",
@@ -175,6 +204,17 @@ const Admin: React.FC = () => {
         <a href={text} target="_blank" rel="noopener noreferrer">
           View Receipt
         </a>
+      ),
+    },
+    {
+      title: "Redeemed",
+      dataIndex: "isRedeemed",
+      key: "isRedeemed",
+      render: (text: boolean, record: PaymentData) => (
+        <Checkbox
+          checked={text}
+          onChange={(e) => handleRedeemedChange(record, e.target.checked)}
+        />
       ),
     },
   ];
