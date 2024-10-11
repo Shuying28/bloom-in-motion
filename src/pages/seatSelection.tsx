@@ -97,7 +97,7 @@ const SeatSelection: React.FC = () => {
   const isEarlyBird = (): boolean => {
     const today = new Date();
     const earlyBirdStart = new Date(today.getFullYear(), 9, 2); // 2/10
-    const earlyBirdEnd = new Date(today.getFullYear(), 9, 11); // 11/10
+    const earlyBirdEnd = new Date(today.getFullYear(), 9, 11, 23, 59); // 11/10 11:59 PM
 
     return today >= earlyBirdStart && today <= earlyBirdEnd;
   };
