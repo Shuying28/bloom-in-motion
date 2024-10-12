@@ -10,13 +10,14 @@ import {
   TableColumnsType,
   TableColumnType,
 } from "antd";
-import { firestore } from "../firebase";
+import { firestore, imageStorage } from "../firebase";
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import "./styles/common.css";
 import "./styles/admin.css";
 import { SearchOutlined } from "@ant-design/icons";
 import { FilterDropdownProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
+import { getMetadata, ref } from "firebase/storage";
 
 interface PaymentData {
   id: string; // Add document ID for updating
@@ -29,6 +30,7 @@ interface PaymentData {
   totalPrice: number;
   receiptUrl: string;
   isRedeemed: boolean;
+  createdDate: Date;
 }
 
 const Admin: React.FC = () => {
@@ -43,10 +45,21 @@ const Admin: React.FC = () => {
     const fetchPayments = async () => {
       try {
         const querySnapshot = await getDocs(collection(firestore, "payments"));
-        const paymentsData = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id, // Add document ID for updating
-        })) as PaymentData[];
+        // const paymentsData = querySnapshot.docs.map((doc) => ({
+        //   ...doc.data(),
+        //   id: doc.id, // Add document ID for updating
+        // })) as PaymentData[];
+        const paymentsData = await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const data = doc.data() as PaymentData;
+            const metadata = await getMetadata(
+              ref(imageStorage, data.receiptUrl)
+            );
+            const createdDate = new Date(metadata.timeCreated);
+            return { ...data, id: doc.id, createdDate };
+          })
+        );
+        paymentsData.sort((a, b) => (a.createdDate! > b.createdDate! ? 1 : -1));
         setPayments(paymentsData);
       } catch (error) {
         if (error instanceof Error) {
@@ -195,6 +208,12 @@ const Admin: React.FC = () => {
       dataIndex: "totalPrice",
       key: "totalPrice",
       render: (price: number) => `RM${price}`,
+    },
+    {
+      title: "Created Date",
+      dataIndex: "createdDate",
+      key: "createdDate",
+      render: (date: Date) => date.toLocaleString(),
     },
     {
       title: "Receipt URL",
