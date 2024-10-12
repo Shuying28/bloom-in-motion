@@ -59,7 +59,6 @@ const Admin: React.FC = () => {
             return { ...data, id: doc.id, createdDate };
           })
         );
-        paymentsData.sort((a, b) => (a.createdDate! > b.createdDate! ? 1 : -1));
         setPayments(paymentsData);
       } catch (error) {
         if (error instanceof Error) {
@@ -213,6 +212,8 @@ const Admin: React.FC = () => {
       title: "Created Date",
       dataIndex: "createdDate",
       key: "createdDate",
+      sorter: (a: PaymentData, b: PaymentData) =>
+        a.createdDate.getTime() - b.createdDate.getTime(),
       render: (date: Date) => date.toLocaleString(),
     },
     {
@@ -246,7 +247,7 @@ const Admin: React.FC = () => {
         loading={loading}
         dataSource={payments}
         columns={columns}
-        rowKey="studentID"
+        rowKey="id"
         rowHoverable={false}
         scroll={{ x: 768 }}
       />

@@ -26,8 +26,11 @@
   border-color: #444;
 }
 
-.custom-table .ant-pagination-item {
-  background-color: #2c2c2c;
+.custom-table .ant-pagination-item,
+.custom-table .ant-table-column-sort,
+.custom-table .ant-table-column-sorters,
+.custom-table .ant-table-column-has-sorters:hover {
+  background-color: #2c2c2c !important;
 }
 
 .custom-table .ant-pagination-item a,
